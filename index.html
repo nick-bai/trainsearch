@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>火车票易查询</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="static/js/layui/css/layui.css" rel="stylesheet">
+    <link href="static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="static/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="static/css/animate.min.css" rel="stylesheet">
+    <link href="static/css/style.min.css?v=4.1.0" rel="stylesheet">
+    <link href="static/css/iCheck/custom.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>火车票易查询</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-horizontal m-t" id="commentForm">
+                        <input type="hidden" id="f_c"/>
+                        <input type="hidden" id="t_c"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">出发地：</label>
+                            <div class="input-group col-sm-3">
+                                <input type="text" class="form-control" placeholder="请输入站名或拼音" id="f_s" name="f_s">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    </ul>
+                                </div>
+                                <!-- /btn-group -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">目的地：</label>
+                            <div class="input-group col-sm-3">
+                                <input type="text" class="form-control" placeholder="请输入站名或拼音" id="t_s" name="t_s">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    </ul>
+                                </div>
+                                <!-- /btn-group -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">出发时间：</label>
+                            <div class="input-group col-sm-3">
+                                <input id="date" type="text" class="laydate-icon form-control layer-date" name="date" required="" aria-required="true" style="height:30px">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车次类型：</label>
+                            <div class="input-group col-sm-8">
+
+                                <div class="radio i-checks col-sm-3">
+                                    <label>
+                                        <input type="checkbox" value="G" name="train_type"> <i></i> GC-高铁/城际</label>
+                                </div>
+                                <div class="radio i-checks col-sm-3">
+                                    <label>
+                                        <input type="checkbox" value="D" name="train_type"> <i></i> D-动车</label>
+                                </div>
+                                <div class="radio i-checks col-sm-3">
+                                    <label>
+                                        <input type="checkbox" value="Z" name="train_type"> <i></i> Z-直达</label>
+                                </div>
+                                <div class="radio i-checks col-sm-3">
+                                    <label>
+                                        <input type="checkbox" value="T" name="train_type"> <i></i> T-特快</label>
+                                </div>
+                                <div class="radio i-checks col-sm-3">
+                                    <label>
+                                        <input type="checkbox" value="K" name="train_type"> <i></i> K-快速</label>
+                                </div>
+                            </div>
+                        </div>
+						
+						<div class="form-group">
+                            <label class="col-sm-2 control-label">时间：</label>
+                            <div class="input-group col-sm-3">
+                                <input id="search_date" type="text" class="form-control" name="search_date" placeholder="例如：10:00">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车次：</label>
+                            <div class="input-group col-sm-3">
+                                <input id="train" type="text" class="form-control" name="train" placeholder="例如：K919">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">刷票频率：</label>
+                            <div class="input-group col-sm-3">
+                                <input id="flash" type="text" class="form-control" name="flash" placeholder="例如：5 即5秒钟刷新一次">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-3 col-sm-offset-2">
+                                <!--<input type="button" value="提交" class="btn btn-primary" id="postform"/>-->
+                                <button class="btn btn-primary" type="submit" id="search">查询</button>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-danger">
+                            注意 ： <br/>
+                            1、输入出发、到达站点时，请选择下拉框中的值，否则无法查询。<br/>
+                            2、默认查询全部车次。<br/>
+                            3、不填写 车次 默认查询所有符合条件的车次。<br/>
+                            4、不填写刷票频率不会进行刷票，刷票频率请填写大于 2 的数字
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>查询结果</h5>
+                    <span id="res" style="margin-left: 10px;" ></span>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>车次</th>
+                            <th>出发时间</th>
+                            <th>到达时间</th>
+                            <th>历时</th>
+                            <th>商务座</th>
+                            <th>特等座</th>
+                            <th>一等座</th>
+                            <th>二等座</th>
+                            <th>高级软卧</th>
+                            <th>软卧</th>
+                            <th>硬卧</th>
+                            <th>软座</th>
+                            <th>硬座</th>
+                            <th>无座</th>
+                            <th>其他</th>
+                        </tr>
+                        </thead>
+                        <tbody id="s_res">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="static/js/jquery.min.js?v=2.1.4"></script>
+<script src="static/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="static/js/iCheck/icheck.min.js"></script>
+<script src="static/js/suggest/bootstrap-suggest.min.js"></script>
+<script src="static/js/layui/layui.js"></script>
+<script type="text/javascript">
+
+    var layer;
+    layui.use('layer', function(){
+        layer = layui.layer;
+    });
+
+    $(function(){
+        $(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",});
+
+        var fsSuggest = $("#f_s").bsSuggest({
+            url: "data/station.json",
+            idField: "stationFlag",
+            keyField: "stationName",
+            //inputWarnColor: '', //输入框内容不是下拉列表选择时的警告色
+            showBtn: true //显示下拉
+        }).on("onDataRequestSuccess",
+                function (e, result) {
+
+                    //console.log("onDataRequestSuccess: ", result)
+                }).on("onSetSelectValue",
+                function (e, keyword) {
+                    $("#f_c").val(keyword.id);
+                    //console.log("onSetSelectValue: ", keyword)
+                }).on("onUnsetSelectValue",
+                function (e) {
+                    console.log("onUnsetSelectValue")
+                });
+
+        var tsSuggest = $("#t_s").bsSuggest({
+            url: "data/station.json",
+            idField: "stationFlag",
+            keyField: "stationName",
+            //inputWarnColor: '', //输入框内容不是下拉列表选择时的警告色
+            showBtn: true //显示下拉
+        }).on("onDataRequestSuccess",
+                function (e, result) {
+
+                    //console.log("onDataRequestSuccess: ", result)
+                }).on("onSetSelectValue",
+                function (e, keyword) {
+                    $("#t_c").val(keyword.id);
+                    //console.log("onSetSelectValue: ", keyword)
+                }).on("onUnsetSelectValue",
+                function (e) {
+                    console.log("onUnsetSelectValue")
+                });
+
+
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+            //日历定义
+            var start = {
+                min: laydate.now(),
+                format: "YYYY-MM-DD",
+                max: "2099-06-16",
+                istime: true,
+                istoday: true,
+            };
+
+            document.getElementById('date').onclick = function(){
+                start.elem = this;
+                laydate(start);
+            }
+        });
+        var id;
+        $("#search").click(function(){
+
+            clearInterval(id);
+            var f_s = $("#f_c").val();
+            if( f_s == '' ){
+                layer.msg('请选择出发城市', {'time' : 1000});
+                return false;
+            }
+
+            var t_s = $("#t_c").val();
+            if( t_s == '' ){
+                layer.msg('请选择到达城市', {'time' : 1000});
+                return false;
+            }
+
+            var date = $("#date").val();
+            if( date == '' ){
+                layer.msg('请选择出发日期', {'time' : 1000});
+                return false;
+            }
+            //指定的车次
+            var train = $.trim($("#train").val());
+            //车次类型
+            var train_type = [];
+            $('input[name="train_type"]:checked').each(function(){
+                train_type.push($(this).val());
+            });
+
+            //刷新频率
+            var flash = $("#flash").val();
+            if( flash == '' ){
+                showData(f_s, t_s, date, train, train_type);
+            }else{
+
+                if( parseInt(flash) < 2 ){
+                    layer.msg('刷新频率必须大于2', {'time' : 1000});
+                    return false;
+                }
+
+                showData(f_s, t_s, date, train, train_type);
+                layer.msg( '数据将' + parseInt(flash) + '秒刷新一次', {'time' : 2000});
+                id = setInterval( function(){
+                    showData(f_s, t_s, date, train, train_type);
+                }, parseInt(flash) * 1000 );
+            }
+        });
+
+    });
+
+    function showData(f_s, t_s, date, train, train_type){
+        var loading = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.getJSON('./index.php', {'f_s' : f_s, 't_s' : t_s, 'date' : date}, function(res){
+            layer.close(loading);
+            if(res.data.flag){
+                var _html = '';
+				
+				var searchDate = $("#search_date").val();
+
+                $.each( res.data.result, function(k, v){
+					var trainData = v.split("|");
+					
+					if( train != '' && train != trainData[3] ) {
+                        return true;
+                    }
+
+                    if( train_type.length > 0 && $.inArray(trainData[3].substr(0, 1), train_type) < 0 ){
+                        return true;
+                    }
+					
+					if (trainData[8] >= searchDate) {
+					
+						_html += "<tr><td>"+ trainData[3] +"</td>";
+						_html += "<td>"+ trainData[8] +"</td>";
+						_html += "<td>"+ trainData[9] +"</td>";
+						_html += "<td>"+ trainData[10] +"</td>";
+						_html += "<td>"+ trainData[32] +"</td>";
+						_html += "<td>"+ trainData[31] +"</td>";
+						_html += "<td>"+ trainData[30] +"</td>";
+						if (trainData[29] >= 1) {
+							_html += "<td style='background:#FF5722;color:#fff'>" + trainData[29] + "</td>";
+						} else {
+							_html += "<td>" + trainData[29] + "</td>";
+						}
+						_html += "<td>"+ trainData[28] +"</td>";
+						_html += "<td>"+ trainData[27] +"</td>";
+						_html += "<td>"+ trainData[26] +"</td>";
+						_html += "<td>"+ trainData[25] +"</td>";
+						_html += "<td>"+ trainData[24] +"</td>";
+						_html += "<td>"+ trainData[23] +"</td>";
+						_html += "<td>"+ trainData[22] +"</td></tr>";
+					}
+                    
+                });
+
+                $("#s_res").html(_html);
+                $("#res").html( "( " + date + " )  共计 <span style='color: red'>" + $("#s_res tr").length + "</span> 个车次");
+            }else{
+                $("#s_res").empty();
+                $("#res").empty();
+                layer.msg('没有符合的数据', {'time':1000});
+            }
+        });
+    }
+
+</script>
+</body>
+</html>
